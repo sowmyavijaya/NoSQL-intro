@@ -1,0 +1,157 @@
+##Creating a table with columns of interest (use of UUID)
+
+CREATE TABLE users (
+  id uuid PRIMARY KEY,
+  email_address text,
+  full_name text
+);
+
+DESCRIBE users
+
+Ouput: CREATE TABLE assignment.users (
+    id uuid PRIMARY KEY,
+    email_address text,
+    full_name text
+) WITH bloom_filter_fp_chance = 0.01
+    AND caching = '{"keys":"ALL", "rows_per_partition":"NONE"}'
+    AND comment = ''
+    AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy'}
+    AND compression = {'sstable_compression': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+    AND dclocal_read_repair_chance = 0.1
+    AND default_time_to_live = 0
+    AND gc_grace_seconds = 864000
+    AND max_index_interval = 2048
+    AND memtable_flush_period_in_ms = 0
+    AND min_index_interval = 128
+    AND read_repair_chance = 0.0
+    AND speculative_retry = '99.0PERCENTILE';
+
+##Inserting a new row into table
+
+INSERT INTO users(id, email_address,full_name) VALUES(uuid(), 'joe@example.com','Joe Bloggs');
+SELECT * FROM users;
+
+output: assignment> SELECT * from users;
+
+ id                                   | email_address   | full_name
+--------------------------------------+-----------------+------------
+ a99a7c61-1a8c-49c5-af99-5f4efdb5dfd2 | joe@example.com | Joe Bloggs
+
+(1 rows)
+
+##Querying for data by primary key
+
+select * from users where id = a99a7c61-1a8c-49c5-af99-5f4efdb5dfd2;
+
+Output:
+
+ id                                   | email_address   | full_name
+--------------------------------------+-----------------+------------
+ a99a7c61-1a8c-49c5-af99-5f4efdb5dfd2 | joe@example.com | Joe Bloggs
+
+(1 rows)
+
+##Querying for certain columns by primary key
+
+create index on users(full_name);
+
+Output: assignment> select * from users where full_name = 'Joe Bloggs';
+
+
+ id                                   | email_address   | full_name
+--------------------------------------+-----------------+------------
+ a99a7c61-1a8c-49c5-af99-5f4efdb5dfd2 | joe@example.com | Joe Bloggs
+
+(1 rows)
+
+##Querying with limits
+
+select * from users limit 50;
+
+Output:
+id                                   | email_address   | full_name
+--------------------------------------+-----------------+------------
+ a99a7c61-1a8c-49c5-af99-5f4efdb5dfd2 | joe@example.com | Joe Bloggs
+
+(1 rows)
+
+(Since we have only 1 record it is just displaying 1 record, if we had for ex: 100 records it will limit the display to 50 records)
+
+##Adding columns
+
+alter table assignment.users add favorite_color text;
+select * from users;
+
+Output:
+
+id                                   | email_address   | favorite_color | full_name
+--------------------------------------+-----------------+----------------+------------
+ a99a7c61-1a8c-49c5-af99-5f4efdb5dfd2 | joe@example.com |           null | Joe Bloggs
+
+(1 rows)
+
+##Updating rows
+
+update assignment.users set favorite_color = 'Blue', full_name = 'Sowmya Damodaran', 
+email_address = 'd17129113@mydit.ie' WHERE id = a99a7c61-1a8c-49c5-af99-5f4efdb5dfd2;
+
+select * from users where id =  a99a7c61-1a8c-49c5-af99-5f4efdb5dfd2;
+
+Output:
+
+id                                   | email_address      | favorite_color | full_name
+--------------------------------------+--------------------+----------------+------------------
+ a99a7c61-1a8c-49c5-af99-5f4efdb5dfd2 | d17129113@mydit.ie |           Blue | Sowmya Damodaran
+
+(1 rows)
+
+
+##Secondary Indices
+
+create index on users(favorite_color);
+select * from users where favorite_color = 'Blue';
+
+Output:
+
+id                                   | email_address      | favorite_color | full_name
+--------------------------------------+--------------------+----------------+------------------
+ a99a7c61-1a8c-49c5-af99-5f4efdb5dfd2 | d17129113@mydit.ie |           Blue | Sowmya Damodaran
+
+(1 rows)
+
+
+##Expiring data
+
+INSERT INTO users(id, email_address, full_name) VALUES(uuid(), 'sebastian@dit.ie', 'Sebastian Dangerfield') using TTL 600;
+select * from users;
+
+Output:
+
+id                                   | email_address      | favorite_color | full_name
+--------------------------------------+--------------------+----------------+-----------------------
+ a99a7c61-1a8c-49c5-af99-5f4efdb5dfd2 | d17129113@mydit.ie |           Blue |      Sowmya Damodaran
+ dc196749-b760-41b4-adc9-0c7bc8b6e6f5 |   sebastian@dit.ie |           null | Sebastian Dangerfield
+
+(2 rows)
+
+## Deleting rows
+
+delete from users where id= a99a7c61-1a8c-49c5-af99-5f4efdb5dfd2;
+select * from users;
+
+Output:
+
+id | email_address | favorite_color | full_name
+----+---------------+----------------+-----------
+
+(0 rows)
+(We can see that the record inserted previously has expired)
+
+
+
+
+
+
+
+
+
