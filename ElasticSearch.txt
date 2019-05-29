@@ -1,0 +1,615 @@
+## Finding health of our cluster
+
+curl "localhost:9200/_cat/indices?v"
+
+Output: 
+health status index uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+yellow open   user  HVgZUSM5Rl2riU3Pt7_Ikg   1   1          0            0       230b           230b
+yellow open   users oHGrO_D5Srq5Wcz5wBcghA   1   1          1            0      4.8kb          4.8kb
+
+
+## Indexing a new document
+
+curl -H "Content-Type: application/json" -XPOST "localhost:9200/users/1" 
+-d '{"firstname":"sowmya","lastname":"Damodaran","studentnumber":"D17129113"}'
+
+Output:
+{"_index":"users","_type":"1","_id":"GEV_umoBzpi7Xj-KvsOG","_version":1,
+"result":"created","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":1,"_primary_term":1}
+
+## Querying for data by primary key
+
+curl -X GET "localhost:9200/users/1/GEV_umoBzpi7Xj-KvsOG?pretty"
+
+Output:
+{
+  "_index" : "users",
+  "_type" : "1",
+  "_id" : "GEV_umoBzpi7Xj-KvsOG",
+  "_version" : 1,
+  "_seq_no" : 1,
+  "_primary_term" : 1,
+  "found" : true,
+  "_source" : {
+    "firstname" : "sowmya",
+    "lastname" : "Damodaran",
+    "studentnumber" : "D17129113"
+  }
+}
+
+##Query for a document by a field
+
+curl -X GET "localhost:9200/users/_search?pretty" -H 'Content-Type: application/json' 
+-d '{"query": { "match": { "studentnumber": "D17129113" } }}'
+
+Output:
+{
+  "took" : 4,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 1,
+      "relation" : "eq"
+    },
+    "max_score" : 0.6931472,
+    "hits" : [
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "GEV_umoBzpi7Xj-KvsOG",
+        "_score" : 0.6931472,
+        "_source" : {
+          "firstname" : "sowmya",
+          "lastname" : "Damodaran",
+          "studentnumber" : "D17129113"
+        }
+      }
+    ]
+  }
+}
+
+
+##AND querying
+
+curl -X GET "localhost:9200/_search?pretty" -H 'Content-Type: application/json' -d'
+
+Output:
+{
+  "query": {
+    "bool" : {
+      "must" : [
+{"match" : { "firstname" : "sowmya" }},
+{"match" : { "lastname" : "Damodaran" }}
+]
+      }
+  }
+}'
+
+
+{
+  "took" : 3,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 2,
+    "successful" : 2,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 1,
+      "relation" : "eq"
+    },
+    "max_score" : 1.4508328,
+    "hits" : [
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "GEV_umoBzpi7Xj-KvsOG",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "sowmya",
+          "lastname" : "Damodaran",
+          "studentnumber" : "D17129113"
+        }
+      }
+    ]
+  }
+}
+
+
+##OR querying
+
+curl -X GET "localhost:9200/_search?pretty" -H 'Content-Type: application/json' -d'
+
+Output:
+{
+  "query": {
+    "bool" : {
+      "should" : [
+{"match" : { "firstname" : "sowmya" }},
+{"match" : { "lastname" : "Damodaran" }}
+]
+      }
+  }
+}'
+
+{
+  "took" : 21,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 2,
+    "successful" : 2,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 2,
+      "relation" : "eq"
+    },
+    "max_score" : 0.9849067,
+    "hits" : [
+ {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "F0VpumoBzpi7Xj-K-8Or",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "sowmya",
+          "lastname" : "damodaran",
+          "studentnumber" : "sam000"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "GEV_umoBzpi7Xj-KvsOG",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "sowmya",
+          "lastname" : "Damodaran",
+          "studentnumber" : "D17129113"
+        }
+      }
+    ]
+  }
+}
+
+
+##Adding fields to a document
+
+curl -X POST "localhost:9200/users/1/GEV_umoBzpi7Xj-KvsOG/_update" -H 'Content-Type: application/json' -d'
+
+Output:
+{
+    "doc":{"favourite_number" : 5,
+"favorite_color": "Maroon"}
+}'
+
+{"_index":"users","_type":"1","_id":"GEV_umoBzpi7Xj-KvsOG","_version":2,"result":"updated","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":8,"_primary_term":1}
+
+>>> curl -X GET "localhost:9200/users/1/GEV_umoBzpi7Xj-KvsOG/?H 'Content-Type: application/json'
+
+Output:
+{
+  "_index" : "users",
+  "_type" : "1",
+  "_id" : "GEV_umoBzpi7Xj-KvsOG",
+  "_version" : 2,
+  "_seq_no" : 8,
+  "_primary_term" : 1,
+  "found" : true,
+  "_source" : {
+    "firstname" : "sowmya",
+    "lastname" : "Damodaran",
+    "studentnumber" : "D17129113",
+    "favorite_color" : "Maroon",
+    "favourite_number" : 5
+  }
+}
+
+
+##Filters
+
+curl -X GET "localhost:9200/users/1/_search?pretty" -H 'Content-Type: application/json' -d'
+
+Output:
+{
+  "query": {
+    "bool" : {
+      "filter": [
+        { "range": { "favourite_number": { "gte": 5 }}},
+{ "range": { "favourite_number": { "lte": 10 }}}] }}}'
+
+
+{
+  "took" : 36,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 2,
+      "relation" : "eq"
+    },
+    "max_score" : 0.0,
+    "hits" : [
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "GEV_umoBzpi7Xj-KvsOG",
+        "_score" : 0.0,
+        "_source" : {
+          "firstname" : "sowmya",
+          "lastname" : "Damodaran",
+          "studentnumber" : "D17129113",
+          "favorite_color" : "Maroon",
+          "favourite_number" : 5
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "GUWEumoBzpi7Xj-KisOa",
+        "_score" : 0.0,
+        "_source" : {
+          "firstname" : "Devraj",
+          "lastname" : "gowda",
+          "studentnumber" : "D17129115",
+          "favorite_color" : "RED",
+          "favourite_number" : 5
+        }
+      }
+    ]
+  }
+}
+
+
+##Aggregations - cardinality(count of documents, by firstname)
+
+curl -X GET "localhost:9200/users/1/_count?pretty" -H 'Content-Type: application/json' -d'
+
+Output:
+curl -X GET "localhost:9200/users/1/_count?pretty" -H 'Content-Type: application/json' -d'
+{
+
+    "query" : {
+        "match" : { "firstname" : "Lorcan" }
+    }
+
+}'
+
+{
+  "count" : 2,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  }
+}
+ 
+##Aggregations - histograms (histogram aggregation of favourite_number with an interval of 1 across all documents)
+
+curl -X POST "localhost:9200/users/1/_search?pretty" -H 'Content-Type: application/json' -d'
+
+Output:
+{
+     "aggs" : {
+         "group_by_histogram" : {
+             "histogram" : {
+                 "field" : "favourite_number",
+                 "interval" : 1
+             }
+         }
+     }
+ }'
+
+{
+  "took" : 113,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 11,
+      "relation" : "eq"
+    },
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "F0VpumoBzpi7Xj-K-8Or",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "sowmya",
+          "lastname" : "damodaran",
+          "studentnumber" : "sam000"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "GkWEumoBzpi7Xj-K_sMy",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "abhi",
+          "lastname" : "gowda",
+          "studentnumber" : "D17129155"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "HEWFumoBzpi7Xj-KxsPN",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "patil",
+          "lastname" : "chandreshekar",
+          "studentnumber" : "D17529555"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "HUWHumoBzpi7Xj-KLMP0",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "patil",
+          "studentnumber" : "D17529555"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "HkWHumoBzpi7Xj-KecMk",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "Divya",
+          "studentnumber" : "D17529555"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "GEV_umoBzpi7Xj-KvsOG",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "sowmya",
+          "lastname" : "Damodaran",
+          "studentnumber" : "D17129113",
+          "favorite_color" : "Maroon",
+          "favourite_number" : 5
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "G0WFumoBzpi7Xj-KV8Nw",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "abhi",
+          "lastname" : "gowda",
+          "studentnumber" : "D17129555",
+          "favorite_color" : "Green",
+          "favourite_number" : 2
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "GUWEumoBzpi7Xj-KisOa",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "Devraj",
+          "lastname" : "gowda",
+          "studentnumber" : "D17129115",
+          "favorite_color" : "RED",
+          "favourite_number" : 5
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "H0WsumoBzpi7Xj-K-8Mt",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "Divya",
+          "studentnumber" : "aksh54"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "IEWtumoBzpi7Xj-KeMMW",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "Lorcan",
+          "studentnumber" : "aksh54"
+        }
+      }
+    ]
+  },
+  "aggregations" : {
+    "group_by_histogram" : {
+      "buckets" : [
+        {
+          "key" : 2.0,
+          "doc_count" : 1
+        },
+        {
+          "key" : 3.0,
+          "doc_count" : 0
+        },
+        {
+          "key" : 4.0,
+          "doc_count" : 0
+        },
+        {
+          "key" : 5.0,
+          "doc_count" : 2
+        }
+      ]
+    }
+  }
+}
+
+
+##Deleting documents
+
+curl -X DELETE "localhost:9200/users/1/GEV_umoBzpi7Xj-KvsOG"
+
+Output:
+{"_index":"users","_type":"1","_id":"GEV_umoBzpi7Xj-KvsOG","_version":3,"result":"deleted","_shards":{"total":2,"successful":1,"failed":0},"_seq_no":14,"_primary_term":1}
+#Cross checking if deleted
+curl -X GET "localhost:9200/users/_search?pretty" -H 'Con application/json' -d'{"query":{"match_all":{}}}'
+
+{
+  "took" : 97,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 10,
+      "relation" : "eq"
+    },
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "F0VpumoBzpi7Xj-K-8Or",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "sowmya",
+          "lastname" : "damodaran",
+          "studentnumber" : "sam000"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "GkWEumoBzpi7Xj-K_sMy",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "abhi",
+          "lastname" : "gowda",
+          "studentnumber" : "D17129155"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "HEWFumoBzpi7Xj-KxsPN",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "patil",
+          "lastname" : "chandreshekar",
+          "studentnumber" : "D17529555"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "HUWHumoBzpi7Xj-KLMP0",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "patil",
+          "studentnumber" : "D17529555"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "HkWHumoBzpi7Xj-KecMk",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "Divya",
+          "studentnumber" : "D17529555"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "G0WFumoBzpi7Xj-KV8Nw",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "abhi",
+          "lastname" : "gowda",
+          "studentnumber" : "D17129555",
+          "favorite_color" : "Green",
+          "favourite_number" : 2
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "GUWEumoBzpi7Xj-KisOa",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "Devraj",
+          "lastname" : "gowda",
+          "studentnumber" : "D17129115",
+          "favorite_color" : "RED",
+          "favourite_number" : 5
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "H0WsumoBzpi7Xj-K-8Mt",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "Divya",
+          "studentnumber" : "aksh54"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "IEWtumoBzpi7Xj-KeMMW",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "Lorcan",
+          "studentnumber" : "aksh54"
+        }
+      },
+      {
+        "_index" : "users",
+        "_type" : "1",
+        "_id" : "IUWvumoBzpi7Xj-Kx8Mo",
+        "_score" : 1.0,
+        "_source" : {
+          "firstname" : "Lorcan",
+          "lastname" : "james",
+          "studentnumber" : "Dfsd4554"
+        }
+      }
+    ]
+  }
+}
+
+#The record with firstname: sowmya, lastname: Damodaran, student ID: D17129113, favorite color: Maroon and favorite_number: 5, has been deleted.
+
+
