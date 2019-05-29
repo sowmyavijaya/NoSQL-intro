@@ -1,0 +1,713 @@
+##Insert data(ex: restaurant data)
+
+db.restaurants.insert({"restaurant_id": "123456","name":"Swan", "address" : { "coord" : [73.8876756,75.767689],"building":"1550","street":"Dawson","zipcode":"77896"},"borough":"Dublin","cuisine":"Italian"})
+db.restaurants.find({"restaurant_id":"123456"}).pretty()
+
+Output: 
+{
+        "_id" : ObjectId("5ca51078b4d85555778693d4"),
+        "restaurant_id" : "123456",
+        "name" : "Swan",
+        "address" : {
+                "coord" : [-73.8876756, 75.767689],
+                "building" : "1550",
+                "street" : "Dawson",
+                "zipcode" : "77896"
+         },
+         "borough" : "Dublin",
+         "cuisine" : "Italian"
+ }
+
+##Find by field value
+
+db.restaurants.find({"name":"Swan"}).pretty()
+
+Output:
+{
+        "_id" : ObjectId("5ca51078b4d85555778693d4"),
+        "restaurant_id" : "123456",
+        "name" : "Swan",
+        "address" : {
+                "coord" : [ -73.8876756, 75.767689],
+               "building" : "1550",
+                "street" : "Dawson",
+                "zipcode" : "77896"
+         },
+         "borough" : "Dublin",
+         "cuisine" : "Italian"
+ }
+
+
+##Find by multiple field values
+
+db.restaurants.find({"borough":"Manhattan","address.street" : "5 Avenue"}).pretty()
+Output: {
+        "_id" : ObjectId("5ca50a18a81b6fe1ea85698a"),
+        "address" : {
+                "building" : "452",
+                "coord" : [
+                        -73.98229409999999,
+                        40.7521152
+                ],
+                "street" : "5 Avenue",
+                "zipcode" : "10018"
+        },
+        "borough" : "Manhattan",
+        "cuisine" : "American",
+        "grades" : [
+                {
+                        "date" : ISODate("2015-01-14T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2014-08-08T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2013-07-17T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 10
+                },
+                {
+                        "date" : ISODate("2012-07-27T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 9
+                }
+        ],
+        "name" : "Hsbc Bank",
+        "restaurant_id" : "40816884"
+}
+{
+        "_id" : ObjectId("5ca50a18a81b6fe1ea856a13"),
+        "address" : {
+                "building" : "645",
+                "coord" : [
+                        -73.9761031,
+                        40.7591668
+                ],
+                "street" : "5 Avenue",
+                "zipcode" : "10022"
+        },
+        "borough" : "Manhattan",
+        "cuisine" : "American",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-04-11T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 8
+                },
+                {
+                        "date" : ISODate("2013-04-03T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2012-04-02T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2011-11-30T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                }
+        ],
+        "name" : "Nba Employer Cafeteria",
+        "restaurant_id" : "40848599"
+}
+{
+        "_id" : ObjectId("5ca50a18a81b6fe1ea856a37"),
+        "address" : {
+                "building" : "1048",
+                "coord" : [
+                        -73.9603267,
+                        40.781264
+                ],
+                "street" : "5 Avenue",
+                "zipcode" : "10028"
+        },
+        "borough" : "Manhattan",
+        "cuisine" : "German",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-04-25T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 10
+                },
+                {
+                        "date" : ISODate("2013-10-24T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 8
+                },
+                {
+                        "date" : ISODate("2013-04-29T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 9
+                },
+                {
+                        "date" : ISODate("2012-04-16T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 9
+                }
+        ],
+        "name" : "Cafe Sabarsky",
+        "restaurant_id" : "40854586"
+}
+{
+        "_id" : ObjectId("5ca50a18a81b6fe1ea856ab6"),
+        "address" : {
+                "building" : "767",
+                "coord" : [
+                        -73.97229949999999,
+                        40.7637256
+                ],
+                "street" : "5 Avenue",
+                "zipcode" : "10153"
+        },
+        "borough" : "Manhattan",
+        "cuisine" : "American",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-09-16T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 12
+                },
+                {
+                        "date" : ISODate("2013-09-11T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 0
+                },
+                {
+                        "date" : ISODate("2012-08-08T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 9
+                },
+                {
+                        "date" : ISODate("2012-03-19T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 8
+                }
+        ],
+        "name" : "Sodexo",
+        "restaurant_id" : "40871769"
+}
+{
+        "_id" : ObjectId("5ca50a18a81b6fe1ea856afb"),
+        "address" : {
+                "building" : "666",
+                "coord" : [
+                        -73.9766459,
+                        40.7602745
+                ],
+                "street" : "5 Avenue",
+                "zipcode" : "10103"
+        },
+        "borough" : "Manhattan",
+        "cuisine" : "American",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-07-21T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 8
+                },
+                {
+                        "date" : ISODate("2013-05-24T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 9
+                },
+                {
+                        "date" : ISODate("2012-06-01T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 9
+                },
+                {
+                        "date" : ISODate("2012-01-23T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 10
+                }
+        ],
+        "name" : "Digby'S",
+        "restaurant_id" : "40880990"
+}
+{
+        "_id" : ObjectId("5ca50a18a81b6fe1ea856bfa"),
+        "address" : {
+                "building" : "1",
+                "coord" : [
+                        -73.9961919,
+                        40.731903
+                ],
+                "street" : "5 Avenue",
+                "zipcode" : "10003"
+        },
+        "borough" : "Manhattan",
+        "cuisine" : "Pizza/Italian",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-10-09T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 10
+                },
+                {
+                        "date" : ISODate("2014-05-03T00:00:00Z"),
+                        "grade" : "B",
+                        "score" : 25
+                },
+                {
+                        "date" : ISODate("2013-09-18T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 10
+                },
+                {
+                        "date" : ISODate("2013-04-04T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                },
+                {
+                        "date" : ISODate("2012-03-02T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 12
+                }
+        ],
+        "name" : "Otto Enoteca Pizzeria",
+        "restaurant_id" : "40927017"
+}
+{
+        "_id" : ObjectId("5ca50a18a81b6fe1ea856c80"),
+        "address" : {
+                "building" : "725",
+                "coord" : [
+                        -73.9739992,
+                        40.7623675
+                ],
+                "street" : "5 Avenue",
+                "zipcode" : "10022"
+        },
+        "borough" : "Manhattan",
+        "cuisine" : "Café/Coffee/Tea",
+        "grades" : [
+                {
+                        "date" : ISODate("2015-01-13T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2014-09-03T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 9
+                },
+                {
+                        "date" : ISODate("2013-08-27T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 12
+                },
+                {
+                        "date" : ISODate("2012-09-12T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 10
+                }
+        ],
+        "name" : "Starbucks Coffee",
+        "restaurant_id" : "40940283"
+}
+
+## Find with conditional
+
+db.restaurants.find({"borough":"Queens","grades.score":{$gt:80}})
+Output: { "_id" : ObjectId("5ca502147df1db795efbdb5b"), "address" : { "building" : "7705", "coord" : [ -73.8878704, 40.7435875 ], 
+"street" : "Woodside Avenue", "zipcode" : "11373" }, "borough" : "Queens", "cuisine" : "Thai", 
+"grades" : [ { "date" : ISODate("2014-05-12T00:00:00Z"), "grade" : "B", "score" : 14 }, { "date" : ISODate("2013-11-20T00:00:00Z"), 
+"grade" : "C", "score" : 84 }, { "date" : ISODate("2012-09-18T00:00:00Z"), "grade" : "A", "score" : 11 }, 
+{ "date" : ISODate("2012-05-03T00:00:00Z"), "grade" : "B", "score" : 23 } ], "name" : "Spicy Shallot", "restaurant_id" : "40979431" }
+
+## Find and sort
+
+db.restaurants.find().sort({"name":1})
+Output: {
+        "_id" : ObjectId("5ca50a19a81b6fe1ea85be2f"),
+        "address" : {
+                "building" : "420",
+                "coord" : [
+                        -73.94310449999999,
+                        40.8108763
+                ],
+                "street" : "Lenox Ave",
+                "zipcode" : "10037"
+        },
+        "borough" : "Manhattan",
+        "cuisine" : "Other",
+        "grades" : [ ],
+        "name" : "",
+        "restaurant_id" : "50018083"
+}
+{
+        "_id" : ObjectId("5ca50a19a81b6fe1ea85be31"),
+        "address" : {
+                "building" : "2580",
+                "coord" : [
+                        -73.970705,
+                        40.7953768
+                ],
+                "street" : "Broadway",
+                "zipcode" : "10025"
+        },
+        "borough" : "Manhattan",
+        "cuisine" : "Other",
+        "grades" : [ ],
+        "name" : "",
+        "restaurant_id" : "50018085"
+}
+{
+        "_id" : ObjectId("5ca50a19a81b6fe1ea85be33"),
+        "address" : {
+                "building" : "308",
+                "coord" : [
+                        -73.9372612,
+                        40.7966002
+                ],
+                "street" : "E 116Th St",
+                "zipcode" : "10029"
+        },
+        "borough" : "Manhattan",
+        "cuisine" : "Other",
+        "grades" : [ ],
+        "name" : "",
+        "restaurant_id" : "50018088"
+}
+{
+        "_id" : ObjectId("5ca50a19a81b6fe1ea85be36"),
+        "address" : {
+                "building" : "3712",
+                "coord" : [
+                        -73.870897,
+                        40.751033
+                ],
+                "street" : "Junction Blvd",
+                "zipcode" : "11368"
+        },
+        "borough" : "Queens",
+        "cuisine" : "Other",
+        "grades" : [ ],
+        "name" : "",	
+        "restaurant_id" : "50018095"
+}
+{
+        "_id" : ObjectId("5ca50a19a81b6fe1ea85be37"),
+        "address" : {
+                "building" : "889",
+                "coord" : [
+                        -73.9857624,
+                        40.7684922
+                ],
+                "street" : "9Th Ave",
+                "zipcode" : "10019"
+        },
+        "borough" : "Manhattan",
+        "cuisine" : "Other",
+        "grades" : [ ],
+        "name" : "",
+        "restaurant_id" : "50018100"
+}
+.
+.
+.
+
+##Find with logical operators
+
+db.restaurants.find({ "cuisine":"Pakistani",$or: [{ "borough": "Queens" }, { "borough": "Brooklyn" }] })
+Output: {
+        "_id" : ObjectId("5ca50a19a81b6fe1ea85b57b"),
+        "address" : {
+                "building" : "964",
+                "coord" : [
+                        -73.967608,
+                        40.63385299999999
+                ],
+                "street" : "Coney Island Avenue",
+                "zipcode" : "11230"
+        },
+        "borough" : "Brooklyn",
+        "cuisine" : "Pakistani",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-06-03T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 3
+                }
+        ],
+        "name" : "Chatkhara Restaurant",
+        "restaurant_id" : "50011137"
+}
+{
+        "_id" : ObjectId("5ca50a19a81b6fe1ea85b99e"),
+        "address" : {
+                "building" : "23603",
+                "coord" : [
+                        -73.731161,
+                        40.727674
+                ],
+                "street" : "Braddock Ave",
+                "zipcode" : "11426"
+        },
+        "borough" : "Queens",
+        "cuisine" : "Pakistani",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-12-23T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 10
+                }
+        ],
+        "name" : "Bar-B-Q Tonight",
+        "restaurant_id" : "50014977"
+}
+{
+        "_id" : ObjectId("5ca50a19a81b6fe1ea85bae2"),
+        "address" : {
+                "building" : "43-39",
+                "coord" : [
+                        -73.82580800000001,
+                        40.751624
+                ],
+                "street" : "Main Street",
+                "zipcode" : "11355"
+        },
+        "borough" : "Queens",
+        "cuisine" : "Pakistani",
+        "grades" : [
+                {
+                        "date" : ISODate("2015-01-15T00:00:00Z"),
+                        "grade" : "Z",
+                        "score" : 32
+                }
+        ],
+        "name" : "Kabab House",
+        "restaurant_id" : "50015855"
+}
+{
+        "_id" : ObjectId("5ca50a19a81b6fe1ea85bc31"),
+        "address" : {
+                "building" : "7064",
+                "coord" : [
+                        -73.8849015,
+                        40.7439113
+                ],
+                "street" : "Broadway",
+                "zipcode" : "11372"
+        },
+        "borough" : "Queens",
+        "cuisine" : "Pakistani",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-11-24T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                }
+        ],
+        "name" : "Kababish",
+        "restaurant_id" : "50016855"
+}
+{
+        "_id" : ObjectId("5ca50a19a81b6fe1ea85bcf1"),
+        "address" : {
+                "building" : "18112",
+                "coord" : [
+                        -73.7812206,
+                        40.7131201
+                ],
+                "street" : "Hillside Ave",
+                "zipcode" : "11432"
+        },
+        "borough" : "Queens",
+        "cuisine" : "Pakistani",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-12-23T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                }
+        ],
+        "name" : "Bbq Village",
+        "restaurant_id" : "50017285"
+}
+
+## Update data
+
+db.restaurants.update({"name": "Swan"},{$set: {"name": "Pink salt"},$currentDate: { "lastModified": true }})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+{
+        "_id" : ObjectId("5ca51078b4d85555778693d4"),
+        "restaurant_id" : "123456",
+        "name" : "Pink salt",
+        "address" : {
+                "coord" : [-73.8876756, 75.767689],
+                "building" : "1550",
+                "street" : "Dawson",
+                "zipcode" : "77896"
+          },
+         "borough" : "Dublin",
+         "cuisine" : "Italian",
+         "lastModified" : ISODate("2019-05-14T18:07:16.698Z")
+ }
+
+db.restaurants.find({"name":"Swan"}).count()
+
+Output: 0
+
+## Update with condition
+
+##To know highest scored restaurant in Queens
+db.restaurants.find({ "borough": "Queens" }).sort({"grades.score":-1}).limit(1).pretty()
+
+{
+        "_id" : ObjectId("5ca50a18a81b6fe1ea856db8"),
+        "address" : {
+                "building" : "7705",
+                "coord" : [
+                        -73.8878704,
+                        40.7435875
+                ],
+                "street" : "Woodside Avenue",
+                "zipcode" : "11373"
+        },
+        "borough" : "Queens",
+        "cuisine" : "Thai",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-05-12T00:00:00Z"),
+                        "grade" : "B",
+                        "score" : 14
+                },
+                {
+                        "date" : ISODate("2013-11-20T00:00:00Z"),
+                        "grade" : "C",
+                        "score" : 84
+                },
+                {
+                        "date" : ISODate("2012-09-18T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                },
+                {
+                        "date" : ISODate("2012-05-03T00:00:00Z"),
+                        "grade" : "B",
+                        "score" : 23
+                }
+        ],
+        "name" : "Spicy Shallot",
+        "restaurant_id" : "40979431"
+}
+
+##To update the name of highest scored restaurant in Queens as “Best restaurant in Queens”
+
+Sol:
+db.restaurants.findAndModify({     
+query: { "borough": "Queens" },     
+sort: {"grades.score":-1},     
+update: {$set: {"name": "Best Restaurant in Queens"},$currentDate: { "lastModified": true } },     
+new: true })
+
+{
+        "_id" : ObjectId("5ca50a18a81b6fe1ea856db8"),
+        "address" : {
+                "building" : "7705",
+                "coord" : [
+                        -73.8878704,
+                        40.7435875
+                ],
+                "street" : "Woodside Avenue",
+                "zipcode" : "11373"
+        },
+        "borough" : "Queens",
+        "cuisine" : "Thai",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-05-12T00:00:00Z"),
+                        "grade" : "B",
+                        "score" : 14
+                },
+                {
+                        "date" : ISODate("2013-11-20T00:00:00Z"),
+                        "grade" : "C",
+                        "score" : 84
+                },
+                {
+                        "date" : ISODate("2012-09-18T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                },
+                {
+                        "date" : ISODate("2012-05-03T00:00:00Z"),
+                        "grade" : "B",
+                        "score" : 23
+                }
+        ],
+        "name" : "Best Restaurant in Queens",
+        "restaurant_id" : "40979431",
+        "lastModified" : ISODate("2019-05-14T19:25:21.870Z")
+}
+
+
+##Update with current date(last modified)
+
+## querying to find the restaurant
+
+db.restaurants.find({"_id":ObjectId("5ca51078b4d85555778693d4")}).pretty()
+
+{
+        "_id" : ObjectId("5ca51078b4d85555778693d4"),
+        "restaurant_id" : "123456",
+        "name" : "Pink salt",
+        "address" : {
+                "coord" : [-73.8876756, 75.767689],
+                "building" : "1550",
+                "street" : "Dawson",
+                "zipcode" : "77896"
+         },
+        "borough" : "Dublin",
+        "cuisine" : "Italian",
+        "lastModified" : ISODate("2019-05-14T18:07:16.698Z")
+ }
+
+## update the restaurant
+
+db.restaurants.update({"_id":ObjectId("5ca51078b4d85555778693d4")},{$set: { "grades": {"date":new Date(),"grade":"A","score":95}},$currentDate: { "lastModified": true }})
+
+Output:
+
+{
+        "_id" : ObjectId("5ca51078b4d85555778693d4"),
+        "restaurant_id" : "123456",
+        "name" : "Pink salt",
+        "address" : {
+                "coord" : [-73.8876756, 75.767689],
+                "building" : "1550",
+                "street" : "Dawson",
+                "zipcode" : "77896"
+         },
+        "borough" : "Dublin",
+        "cuisine" : "Italian",
+        "grades" : {
+                "date" : ISODate("2019-05-14T19:55:16.697Z"),
+                "grade" : "A",
+                "score" : 95
+        },
+        "lastModified" : ISODate("2019-05-14T19:55:16.698Z")
+ }
+
+## Remove all restaurants less than 20 score
+
+db.restaurants.deleteMany({"grades.score":{$lt:20}})
+
+Output:
+{ "acknowledged" : true, "deletedCount" : 24113 }
+
+
+
+
+
+
+
+
