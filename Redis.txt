@@ -1,0 +1,119 @@
+##Setting key and value pair
+set mykey myvalue
+get mykey
+
+Ouput: "myvalue"
+
+##Checking if a key exists
+
+exists key1
+
+Output: (integer) 0
+
+##Lists - populating
+
+rpush numlist 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+lrange mylist 0 19
+
+Output:
+1) "1"
+2) "2"
+3) "3"
+4) "4"
+5) "5"
+6) "6"
+7) "7"
+8) "8"
+9) "9"
+10) "10"
+11) "11"
+12) "12"
+13) "13"
+14) "14"
+15) "15"
+16) "16"
+17) "17"
+18) "18"
+19) "19"
+20) "20"
+
+##Lists - trimming
+
+ltrim mylist 0 9
+OK
+
+##Lists - retrieving ranges
+
+lrange mylist 0 19
+1) "1"
+2) "2"
+3) "3"
+4) "4"
+5) "5"
+6) "6"
+7) "7"
+8) "8"
+9) "9"
+10) "10"
+
+##Hashes - setting values
+
+hmset d17129113 Firstname Sowmya Lastname Damodaran Favourite_colour Blue
+OK
+
+##Hashes - retrieving values
+
+hget d17129113 Favourite_colour
+"Blue"
+
+##Sets - members: Creating a set and populate it as follows
+
+#adding set and values
+sadd aset bob pat cat mat pat bob sob rob lob
+
+Output:
+(integer) 7
+
+#fetching values
+smembers aset
+
+Output: 
+1) "lob"
+2) "pat"
+3) "rob"
+4) "sob"
+5) "cat"
+6) "bob"
+7) "mat"
+
+##Sets - membership
+sismember asset cat
+
+Output:
+(integer) 1
+
+##Sorted sets - populating
+
+ZADD SORTLIST 1815 Ada_Lovelace
+(integer) 1
+ZADD SORTLIST 1949 Anita_borg
+(integer) 1
+ZADD SORTLIST 1939 Barbara_Liskov
+(integer) 1
+ZADD SORTLIST 1906 Grace_Hopper
+(integer) 1
+
+##Sorted sets - retrieving
+
+ZPOPMAX SORTLIST 2
+
+Output:
+1) "Anita_borg"
+2) "1949"
+3) "Barbara_Liskov"
+4) "1939"
+
+
+
+
+
